@@ -11,28 +11,21 @@ import javax.persistence.Query;
 import entidade.Cliente;
 import entidade.Movimentacao;
 
-public class ClienteDAO {
+public class ClienteDAO extends DAOGenerico<Cliente>{
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("bancoPU");
+    public ClienteDAO() {
+		super(Cliente.class);
+	}
 
-    public Cliente inserir(Cliente cliente) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(cliente);
-        em.getTransaction().commit();
-        em.close();
-        return cliente;
-    }
-    
     public Cliente buscarPorId(Long id) {
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = getEntityManager();
 		Cliente cliente = em.find(Cliente.class, id);
 		em.close();
 		return cliente;
 	}
 
     public List<Cliente> buscarPorCpf(String cpf) {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = getEntityManager();
         List<Cliente> clientes = null;
         try {
             clientes = em.createQuery("from Cliente where cpf='" + cpf + "'", Cliente.class).getResultList();

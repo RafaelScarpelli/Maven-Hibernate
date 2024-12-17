@@ -3,11 +3,13 @@ package servico;
 import java.util.List;
 
 import dao.ContaDAO;
+import dao.DAOGenerico;
 import entidade.Conta;
 
-public class ContaServico {
+public class ContaServico implements ServicoInterfaceGenerica<Conta>{
     ContaDAO dao = new ContaDAO();
 
+    @Override
     public Conta inserir(Conta conta) {
         if (validarOperacao(conta) == false) {
             System.out.println("Operação inválida");
@@ -24,5 +26,10 @@ public class ContaServico {
         }
         return true;
     }
+
+	@Override
+	public DAOGenerico<Conta> getDao() {
+		return dao;
+	}
     
 }

@@ -12,21 +12,14 @@ import entidade.Cliente;
 import entidade.Conta;
 import entidade.Movimentacao;
 
-public class ContaDAO {
+public class ContaDAO extends DAOGenerico<Conta>{
 
-	static EntityManagerFactory emf = Persistence.createEntityManagerFactory("bancoPU");
-
-	public Conta inserir(Conta conta) {
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		em.persist(conta);
-		em.getTransaction().commit();
-		em.close();
-		return conta;
+	public ContaDAO() {
+		super(Conta.class);
 	}
 
-	public static List<Conta> buscarPorIdCliente(Conta conta) {
-		EntityManager em = emf.createEntityManager();
+	public List<Conta> buscarPorIdCliente(Conta conta) {
+		EntityManager em = getEntityManager();
 		Cliente cliente = conta.getCliente();
 		long id = cliente.getId();
 		List<Conta> contas = null;
@@ -39,4 +32,16 @@ public class ContaDAO {
 		}
 		return contas;
 	}
+	
+	public Conta buscarPorId(Long id) {
+		EntityManager em = getEntityManager();
+		try {
+			Conta conta = em.createQuery("from Conta where id = '"+id+"'", Conta.class).getSingleResult();
+			em.close();
+			return conta;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}	
+    }
 }

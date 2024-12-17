@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Scanner;
 
 import util.ValidarCpf;
+import dao.DAOGenerico;
 import dao.MovimentacaoDAO;
 import entidade.Movimentacao;
 
-public class MovimentacaoServico {
+public class MovimentacaoServico implements ServicoInterfaceGenerica<Movimentacao>{
 	MovimentacaoDAO dao = new MovimentacaoDAO();
 
+	@Override
 	public Movimentacao inserir(Movimentacao movimentacao) {
 		if (validarOperacao(movimentacao) == false) {
 			System.out.println("Operação inválida");
@@ -185,5 +187,10 @@ public class MovimentacaoServico {
 
 		}
 		return null;
+	}
+
+	@Override
+	public DAOGenerico<Movimentacao> getDao() {
+		return dao;
 	}
 }

@@ -3,18 +3,20 @@ package servico;
 import java.util.List;
 
 import dao.ClienteDAO;
+import dao.DAOGenerico;
 import entidade.Cliente;
 import util.ValidarCpf;
 
-public class ClienteServico {
-    ClienteDAO clienteDAO = new ClienteDAO();
+public class ClienteServico implements ServicoInterfaceGenerica<Cliente>{
+    ClienteDAO dao = new ClienteDAO();
 
+    @Override
     public Cliente inserir(Cliente cliente) {
         if (validarOperacao(cliente) == false) {
             System.out.println("Operação inválida");
             return null;
         }
-        return clienteDAO.inserir(cliente);
+        return dao.inserir(cliente);
     }
 
     public boolean validarOperacao(Cliente cliente) {
@@ -32,7 +34,7 @@ public class ClienteServico {
     }
 
     public boolean buscarPorCpf(String cpf) {
-        List<Cliente> clientes = clienteDAO.buscarPorCpf(cpf);
+        List<Cliente> clientes = dao.buscarPorCpf(cpf);
         for (Cliente cliente : clientes) {
             if (cliente.getCpf().equals(cpf)) {
                 return false;
@@ -40,4 +42,9 @@ public class ClienteServico {
         }
         return true;
     }
+
+	@Override
+	public DAOGenerico<Cliente> getDao() {
+		return dao;
+	}
 }

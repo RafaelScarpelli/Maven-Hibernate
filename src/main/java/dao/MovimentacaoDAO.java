@@ -12,51 +12,14 @@ import javax.persistence.Query;
 
 import entidade.Movimentacao;
 
-public class MovimentacaoDAO {
+public class MovimentacaoDAO extends DAOGenerico<Movimentacao>{
 
-	EntityManagerFactory emf = Persistence.createEntityManagerFactory("bancoPU");
-
-	public Movimentacao inserir(Movimentacao movimentacao) {
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		em.persist(movimentacao);
-		em.getTransaction().commit();
-		em.close();
-		return movimentacao;
-	}
-
-	public Movimentacao alterar(Movimentacao movimentacao) {
-		Movimentacao movimentacaoBanco = null;
-		if (movimentacao.getId() != null) {
-			EntityManager em = emf.createEntityManager();
-			em.getTransaction().begin();
-
-			movimentacaoBanco = buscarPorId(movimentacao.getId());
-
-			if (movimentacaoBanco != null) {
-				movimentacaoBanco.setDescricao(movimentacao.getDescricao());
-				em.merge(movimentacaoBanco);
-			}
-
-			em.getTransaction().commit();
-			em.close();
-		}
-		return movimentacaoBanco;
-	}
-
-	public void excluir(Long id) {
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		Movimentacao movimentacao = em.find(Movimentacao.class, id);
-		if (movimentacao != null) {
-			em.remove(movimentacao);
-		}
-		em.getTransaction().commit();
-		em.close();
+	public MovimentacaoDAO() {
+		super(Movimentacao.class);
 	}
 
 	public List<Movimentacao> listarTodos() {
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = getEntityManager();
 		// hql: hibernate query language
 		List<Movimentacao> movimentacaos = null;
 		try {
@@ -72,14 +35,14 @@ public class MovimentacaoDAO {
 	// buscar todas as movimentacaos de acordo com o tipo da transação
 
 	public List<Movimentacao> buscarPorCpf(String cpf) {
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = getEntityManager();
 		Query query = em.createQuery("from Movimentacao where cpf_correntista='" + cpf + "'", Movimentacao.class);
 		em.close();
 		return query.getResultList();
 	}
 
 	public List<Movimentacao> buscarPorCpfTipoTransacao(String cpf, String tipoTransacao) {
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = getEntityManager();
 		try {
 			Query query = em.createQuery(
 					"from Movimentacao where cpf_correntista='" + cpf + "' and tipo_transacao='" + tipoTransacao + "'",
@@ -94,7 +57,7 @@ public class MovimentacaoDAO {
 	}
 
 	public List<Movimentacao> buscarPorCpfPeriodico(String cpf, String inicio, String fim) {
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = getEntityManager();
 		try {
 
 			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
@@ -118,7 +81,7 @@ public class MovimentacaoDAO {
 	}
 
 	public List<Movimentacao> buscarPorCpfMes(String cpf, String dia) {
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = getEntityManager();
 		try {
 			// Converte a string de data para o tipo Date
 			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
@@ -143,7 +106,7 @@ public class MovimentacaoDAO {
 	}
 
 	public List<Movimentacao> buscarPorCpfDia(String cpf, String dia) {
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = getEntityManager();
 		try {
 			// Converte a string de data para o tipo Date
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -162,8 +125,8 @@ public class MovimentacaoDAO {
 			em.close();
 		}
 	}
-	public List<Movimentacao> buscarTipoTransacaoTipoConta(String cpf, String tipoTransacao, String contaTipo) {
-		EntityManager em = emf.createEntityManager();
+	public List<Movimentacao> buscarTipoTransacaoTipoConta(String cpf, String dia, String tipoTransacao, String contaTipo) {
+		EntityManager em = getEntityManager();
 		try {
 			// Converte a string de data para o tipo Date
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -186,7 +149,7 @@ public class MovimentacaoDAO {
 	}
 
 	public List<Movimentacao> buscarPorCpfDiaTipoTransacao(String cpf, String dia, String tipoTransacao) {
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = getEntityManager();
 		try {
 			// Converte a string de data para o tipo Date
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -209,7 +172,7 @@ public class MovimentacaoDAO {
 	}
 
 	public Movimentacao buscarPorId(Long id) {
-		EntityManager em = emf.createEntityManager();
+		EntityManager em = getEntityManager();
 		Movimentacao movimentacao = em.find(Movimentacao.class, id);
 		em.close();
 		return movimentacao;
@@ -217,7 +180,7 @@ public class MovimentacaoDAO {
 	}
 
 	public List<Movimentacao> buscarMovimentacoesTresMeses(String cpf) {
-	    EntityManager em = emf.createEntityManager();
+	    EntityManager em = getEntityManager();
 	    try {
 	        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 	        Calendar calendar = Calendar.getInstance();
