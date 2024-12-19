@@ -23,7 +23,7 @@ public abstract class DAOGenerico<T> {
 			em.persist(objeto);
 			em.getTransaction().commit();
 			return objeto;
-		}finally {
+		}catch (Exception e) {
 			em.getTransaction().rollback();
             em.close();
             return null;
