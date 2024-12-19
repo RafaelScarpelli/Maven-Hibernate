@@ -7,8 +7,9 @@ import dao.DAOGenerico;
 import entidade.Cliente;
 import util.ValidarCpf;
 
+
 public class ClienteServico implements ServicoInterfaceGenerica<Cliente>{
-    ClienteDAO dao = new ClienteDAO();
+    static ClienteDAO dao = new ClienteDAO();
 
     @Override
     public Cliente inserir(Cliente cliente) {
@@ -31,6 +32,11 @@ public class ClienteServico implements ServicoInterfaceGenerica<Cliente>{
         }
 
         return true;
+    }
+    
+    public static Cliente retornarClientePorCpf(String cpf) {
+        Cliente cliente = dao.retornarCpf(cpf);
+        return cliente;
     }
 
     public boolean buscarPorCpf(String cpf) {

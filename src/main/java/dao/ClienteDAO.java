@@ -23,6 +23,13 @@ public class ClienteDAO extends DAOGenerico<Cliente>{
 		em.close();
 		return cliente;
 	}
+    
+    public Cliente retornarCpf(String cpf) {
+        EntityManager em = getEntityManager();
+        Cliente cliente = em.createQuery("from Cliente where cpf='" + cpf + "'", Cliente.class).getSingleResult();
+        em.close();
+        return cliente;
+    }
 
     public List<Cliente> buscarPorCpf(String cpf) {
         EntityManager em = getEntityManager();

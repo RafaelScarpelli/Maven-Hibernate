@@ -35,16 +35,14 @@ public class Movimentacao {
 	@Temporal(TemporalType.DATE)
 	private Date dataTransacao;
 	@ManyToOne
-	@JoinColumn(name="conta_id")
+	@JoinColumn(name = "conta_id")
 	private Conta conta;
-	
-	
+
 	private int horarioMovimentacao;
 
 	@Column(name = "valor_operacao")
 	private Double valorOperacao;
-	
-	
+
 	public int getHorarioMovimentacao() {
 		return horarioMovimentacao;
 	}

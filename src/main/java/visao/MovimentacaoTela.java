@@ -19,6 +19,7 @@ import entidade.Conta;
 import entidade.ContaTipo;
 import entidade.Movimentacao;
 import entidade.Movimentacao;
+import servico.ClienteServico;
 import servico.MovimentacaoServico;
 
 public class MovimentacaoTela {
@@ -36,18 +37,10 @@ public class MovimentacaoTela {
 		ContaControle controleConta = new ContaControle();
 		Conta conta = new Conta();
 		conta.setDataAbertura(new Date());
-		conta.setCliente(cliente);
-		conta.setContaTipo(ContaTipo.CONTA_POUPANCA);
+		conta.setCliente(ClienteServico.retornarClientePorCpf("10174068980"));
+		conta.setContaTipo(ContaTipo.CONTA_CORRENTE);
 		controleConta.inserir(conta);
-		
-		Conta conta1 = new Conta();
-		conta1.setDataAbertura(new Date());
-		conta1.setCliente(cliente);
-		conta1.setContaTipo(ContaTipo.CONTA_CORRENTE);
-		controleConta.inserir(conta1);
-		
 
-		
 		MovimentacaoControle controleMovimentacao = new MovimentacaoControle();
 		Movimentacao movimentacao = new Movimentacao();
 		movimentacao.setCpfCorrentista("10174068980");
@@ -55,7 +48,7 @@ public class MovimentacaoTela {
 		movimentacao.setDescricao("Depósito de 500,00 no dia 03/10/24");
 		movimentacao.setNomeCorrentista("José");
 		movimentacao.setTipoTransacao("deposito");
-		movimentacao.setValorOperacao(8.);
+		movimentacao.setValorOperacao(100.);
 		movimentacao.setHorarioMovimentacao(LocalDateTime.now().getHour());
 		controleMovimentacao.inserir(movimentacao);
 
@@ -63,20 +56,18 @@ public class MovimentacaoTela {
 		if (notificar != null) {
 			System.out.println(notificar);
 		}
-		// Scanner sc = new Scanner(System.in);
-		// String inicio = sc.nextLine();
-		// String fim = sc.nextLine();
-		// List<Movimentacao> movimentacoes = controle.extratoPeriodico(movimentacao,
-		// inicio, fim);
-		// System.out.println("Extrato entre" + inicio + "-" + fim + ":");
-		// for (Movimentacao movimentacao2 : movimentacoes) {
-		// System.out.println("id" + movimentacao2.getId() + "nome: " +
-		// movimentacao2.getNomeCorrentista() + " cpf: "
-		// + movimentacao2.getCpfCorrentista()
-		// + " tipo transação: " + movimentacao2.getTipoTransacao() + " valor operação:
-		// " + movimentacao2.getValorOperacao()
-		// + " data transação: " + movimentacao2.getDataTransacao());
-		// }
-		// }
+		
+		Scanner sc = new Scanner(System.in);
+		String inicio = sc.nextLine();
+		String fim = sc.nextLine();
+		List<Movimentacao> movimentacoes = controleMovimentacao.extratoPeriodico(movimentacao, inicio, fim);
+		System.out.println("Extrato entre" + inicio + "-" + fim + ":");
+		for (Movimentacao movimentacao2 : movimentacoes) {
+			System.out.println("id" + movimentacao2.getId() + "nome: " + movimentacao2.getNomeCorrentista() + " cpf: "
+					+ movimentacao2.getCpfCorrentista() + " tipo transação: " + movimentacao2.getTipoTransacao()
+					+ " valor operação:" + movimentacao2.getValorOperacao() + " data transação: "
+					+ movimentacao2.getDataTransacao());
+		}
+
 	}
 }
